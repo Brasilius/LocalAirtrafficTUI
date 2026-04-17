@@ -280,7 +280,7 @@ fn render_footer(f: &mut Frame, area: Rect) {
         Span::styled(" ↓ j ", Style::default().fg(Color::Black).bg(Color::DarkGray)),
         Span::raw(" Scroll  "),
         Span::styled(
-            "  Auto-refresh every 15 s",
+            "  Auto-refresh every 30 min",
             Style::default().fg(Color::DarkGray),
         ),
     ]);

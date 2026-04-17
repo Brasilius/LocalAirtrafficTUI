@@ -104,7 +104,20 @@ pub async fn fetch_nearby_aircraft(lat: f64, lon: f64, radius_miles: f64) -> Res
         .timeout(std::time::Duration::from_secs(12))
         .build()?;
 
-    let resp: OpenSkyResponse = client.get(&url).send().await?.json().await?;
+    let mut request = client.get(&url);
+    if let (Ok(user), Ok(pass)) = (
+        std::env::var("OPENSKY_USER"),
+        std::env::var("OPENSKY_PASS"),
+    ) {
+        request = request.basic_auth(user, Some(pass));
+    }
+
+    let response = request.send().await?;
+    let status = response.status();
+    if !status.is_success() {
+        return Err(anyhow!("OpenSky returned HTTP {status}"));
+    }
+    let resp: OpenSkyResponse = response.json().await?;
 
     let mut aircraft = Vec::new();
 

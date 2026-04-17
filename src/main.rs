@@ -16,7 +16,7 @@ use std::{
     time::{Duration, Instant},
 };
 
-const REFRESH_SECS: u64 = 15;
+const REFRESH_SECS: u64 = 1800;
 
 #[tokio::main]
 async fn main() -> Result<()> {
