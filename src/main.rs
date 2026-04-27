@@ -17,10 +17,21 @@ use std::{
 };
 
 const REFRESH_SECS: u64 = 1800;
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();
+
+    if args.iter().any(|a| a == "--version" || a == "-V") {
+        println!("LocalAirTraffic {VERSION}");
+        return Ok(());
+    }
+
+    if args.iter().any(|a| a == "--help" || a == "-h") {
+        print_help();
+        return Ok(());
+    }
 
     // Resolve location: CLI flags beat IP geolocation.
     let location = match location_from_args(&args) {
@@ -124,4 +135,35 @@ fn radius_from_args(args: &[String]) -> Option<f64> {
 fn flag_value<'a>(args: &'a [String], flag: &str) -> Option<&'a str> {
     let pos = args.iter().position(|a| a == flag)?;
     args.get(pos + 1).map(String::as_str)
+}
+
+fn print_help() {
+    println!(
+        "LocalAirTraffic {VERSION}
+A terminal UI for monitoring live ADS-B air traffic near you.
+
+USAGE:
+    LocalAirTraffic [OPTIONS]
+
+OPTIONS:
+    --lat <deg>        Override latitude  (decimal degrees)
+    --lon <deg>        Override longitude (decimal degrees)
+    --radius <miles>   Search radius in miles [default: 10]
+    -V, --version      Print version
+    -h, --help         Print this help
+
+KEY BINDINGS:
+    q / Esc / Ctrl-C   Quit
+    r / R / F5         Force refresh
+    ↑ / k              Scroll up
+    ↓ / j              Scroll down
+
+ENVIRONMENT:
+    OPENSKY_USER       OpenSky Network username (optional, raises rate limits)
+    OPENSKY_PASS       OpenSky Network password
+
+EXAMPLES:
+    LocalAirTraffic
+    LocalAirTraffic --lat 51.5074 --lon -0.1278 --radius 15"
+    );
 }

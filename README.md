@@ -40,15 +40,19 @@ Grab the archive for your platform from the [Releases page](https://github.com/B
 ## Usage
 
 ```
-LocalAirtrafficTUI [--lat <deg>] [--lon <deg>] [--radius <miles>]
+LocalAirTraffic [OPTIONS]
 ```
 
 ```bash
 # Auto-detect location via IP
-LocalAirtrafficTUI
+LocalAirTraffic
 
 # Specify location and radius manually
-LocalAirtrafficTUI --lat 51.5074 --lon -0.1278 --radius 15
+LocalAirTraffic --lat 51.5074 --lon -0.1278 --radius 15
+
+# Print help / version
+LocalAirTraffic --help
+LocalAirTraffic --version
 ```
 
 ### Key bindings
